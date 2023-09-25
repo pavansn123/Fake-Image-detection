@@ -1,5 +1,3 @@
-# https://youtu.be/nbRkLE2fiVI
-# https://youtu.be/1HqjPqNglPc
 """
 Single Image Super-Resolution Using SRGAN
 

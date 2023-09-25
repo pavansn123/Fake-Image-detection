@@ -27,7 +27,6 @@ from keras.layers import Conv2D, PReLU,BatchNormalization, Flatten
 from keras.layers import UpSampling2D, LeakyReLU, Dense, Input, add
 from tqdm import tqdm
 
-#########################################################################
 
 #Define blocks to build the generator
 def res_block(ip):
@@ -105,13 +104,6 @@ def create_disc(disc_ip):
     return Model(disc_ip, validity)
 
 
-#VGG19 
-#We need VGG19 for the feature map obtained by the j-th convolution (after activation) 
-#before the i-th maxpooling layer within the VGG19 network.(as described in the paper)
-#Let us pick the 3rd block, last conv layer. 
-#Build a pre-trained VGG19 model that outputs image features extracted at the
-# third block of the model
-# VGG architecture: https://github.com/keras-team/keras/blob/master/keras/applications/vgg19.py
 from keras.applications import VGG19
 
 def build_vgg(hr_shape):
@@ -131,16 +123,6 @@ def create_comb(gen_model, disc_model, vgg, lr_ip, hr_ip):
     
     return Model(inputs=[lr_ip, hr_ip], outputs=[validity, gen_features])
 
-# 2 losses... adversarial loss and content (VGG) loss
-#AdversariaL: is defined based on the probabilities of the discriminator over all training samples
-# use binary_crossentropy
-
-#Content: feature map obtained by the j-th convolution (after activation) 
-#before the i-th maxpooling layer within the VGG19 network.
-# MSE between the feature representations of a reconstructed image
-# and the reference image. 
-
-###################################################################################
 
 #Load first n number of images (to train on a subset of all images)
 #For demo purposes, let us use 5000 images
@@ -283,7 +265,6 @@ for e in range(epochs):
         #Save the generator after every n epochs (Usually 10 epochs)
         generator.save("gen_e_"+ str(e+1) +".h5")
 
-###################################################################################
 #Test - perform super resolution using saved generator model
 from keras.models import load_model
 from numpy.random import randint
@@ -316,7 +297,7 @@ plt.imshow(tar_image[0,:,:,:])
 plt.show()
 
 
-################################################
+
 sreeni_lr = cv2.imread("data/sreeni_32.jpg")
 sreeni_hr = cv2.imread("data/sreeni_256.jpg")
 
